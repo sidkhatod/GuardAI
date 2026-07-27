@@ -2,6 +2,8 @@ import os
 import asyncpg
 
 DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://governance:governance_dev@localhost:5432/governance")
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 _pool = None
 
 async def get_pool():

@@ -27,7 +27,11 @@ def cached_encode(model, text):
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await get_pool()
+    pool = await get_pool()
+    with open("app/schema.sql", "r") as f:
+        schema = f.read()
+    async with pool.acquire() as conn:
+        await conn.execute(schema)
     
     from app.redis_client import get_redis
     r = get_redis()

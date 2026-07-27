@@ -27,10 +27,11 @@ services:
           name: governance-backend
           property: envVarConnectionPrefix
 
+  - type: redis
+    name: governance-redis
+    plan: free
+
 databases:
   - name: governance-db
     databaseName: governance
     user: governance
-
-redis:
-  - name: governance-redis

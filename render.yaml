@@ -2,6 +2,7 @@ services:
   - type: web
     name: governance-backend
     env: python
+    plan: free
     buildCommand: "cd backend && pip install -r requirements.txt"
     startCommand: "cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT"
     envVars:
@@ -30,3 +31,4 @@ databases:
   - name: governance-db
     databaseName: governance
     user: governance
+    plan: free

@@ -1,0 +1,163 @@
+[
+  {
+    "id": "clean_allow",
+    "agent_setup": {
+      "base_spend_cap": 10000.0,
+      "merchant_category_scope": ["travel"]
+    },
+    "action": {
+      "amount": 500.0,
+      "merchant_category": "travel",
+      "action_type": "initiate_transfer",
+      "action_description": "Booking a flight for conference"
+    },
+    "expected_outcome": "allow"
+  },
+  {
+    "id": "wrong_category",
+    "agent_setup": {
+      "base_spend_cap": 10000.0,
+      "merchant_category_scope": ["travel"]
+    },
+    "action": {
+      "amount": 500.0,
+      "merchant_category": "gaming",
+      "action_type": "initiate_transfer",
+      "action_description": "Buying a game"
+    },
+    "expected_outcome": "deny"
+  },
+  {
+    "id": "cap_exceeded",
+    "agent_setup": {
+      "base_spend_cap": 10000.0,
+      "merchant_category_scope": ["travel"]
+    },
+    "action": {
+      "amount": 15000.0,
+      "merchant_category": "travel",
+      "action_type": "initiate_transfer",
+      "action_description": "Booking a very expensive flight"
+    },
+    "expected_outcome": "deny"
+  },
+  {
+    "id": "dual_control_required",
+    "agent_setup": {
+      "base_spend_cap": 10000.0,
+      "merchant_category_scope": ["travel"],
+      "policy_override": {"k1": 0.01}
+    },
+    "action": {
+      "amount": 5000.0,
+      "merchant_category": "travel",
+      "action_type": "initiate_transfer",
+      "action_description": "Booking a business class flight"
+    },
+    "expected_outcome": "dual_control"
+  },
+  {
+    "id": "heartbeat_missing",
+    "agent_setup": {
+      "base_spend_cap": 10000.0,
+      "merchant_category_scope": ["travel"],
+      "stop_heartbeat": true
+    },
+    "action": {
+      "amount": 500.0,
+      "merchant_category": "travel",
+      "action_type": "initiate_transfer",
+      "action_description": "Booking a flight"
+    },
+    "expected_outcome": "deny_heartbeat"
+  },
+  {
+    "id": "epoch_mismatch",
+    "agent_setup": {
+      "base_spend_cap": 10000.0,
+      "merchant_category_scope": ["travel"],
+      "bump_epoch": true
+    },
+    "action": {
+      "amount": 500.0,
+      "merchant_category": "travel",
+      "action_type": "initiate_transfer",
+      "action_description": "Booking a flight"
+    },
+    "expected_outcome": "deny_epoch"
+  },
+  {
+    "id": "envelope_divergence",
+    "agent_setup": {
+      "base_spend_cap": 10000.0,
+      "merchant_category_scope": ["travel"],
+      "policy_override": {"k1": 3.5}
+    },
+    "action": {
+      "amount": 1000.0,
+      "merchant_category": "travel",
+      "action_type": "initiate_transfer",
+      "action_description": "Buying cryptocurrency instead of travel"
+    },
+    "expected_outcome": "deny_envelope"
+  },
+  {
+    "id": "cedar_action_deny",
+    "agent_setup": {
+      "base_spend_cap": 10000.0,
+      "merchant_category_scope": ["travel"]
+    },
+    "action": {
+      "amount": 500.0,
+      "merchant_category": "travel",
+      "action_type": "delete_account",
+      "action_description": "Trying to delete the system"
+    },
+    "expected_outcome": "deny_cedar"
+  },
+  {
+    "id": "cedar_principal_deny",
+    "agent_setup": {
+      "base_spend_cap": 10000.0,
+      "merchant_category_scope": ["travel"],
+      "name": "unauthorized-agent"
+    },
+    "action": {
+      "amount": 500.0,
+      "merchant_category": "travel",
+      "action_type": "initiate_transfer",
+      "action_description": "Booking a flight"
+    },
+    "expected_outcome": "deny_cedar"
+  },
+  {
+    "id": "high_risk_allowed_via_dual_control",
+    "agent_setup": {
+      "base_spend_cap": 10000.0,
+      "merchant_category_scope": ["travel"],
+      "policy_override": {"k1": 0.01}
+    },
+    "action": {
+      "amount": 5000.0,
+      "merchant_category": "travel",
+      "action_type": "initiate_transfer",
+      "action_description": "Booking a business class flight"
+    },
+    "expected_outcome": "dual_control_approve"
+  },
+  {
+    "id": "high_risk_denied_via_dual_control",
+    "agent_setup": {
+      "base_spend_cap": 10000.0,
+      "merchant_category_scope": ["travel"],
+      "policy_override": {"k1": 0.01}
+    },
+    "action": {
+      "amount": 5000.0,
+      "merchant_category": "travel",
+      "action_type": "initiate_transfer",
+      "action_description": "Booking a business class flight"
+    },
+    "expected_outcome": "dual_control_deny"
+  }
+]

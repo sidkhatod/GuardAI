@@ -1,0 +1,36 @@
+services:
+  - type: web
+    name: governance-backend
+    env: python
+    buildCommand: "cd backend && pip install -r requirements.txt"
+    startCommand: "cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: governance-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: governance-redis
+          property: connectionString
+
+  - type: web
+    name: governance-frontend
+    env: static
+    buildCommand: "cd frontend && npm install && npm run build"
+    staticPublishPath: "./frontend/dist"
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: governance-backend
+          property: envVarConnectionPrefix
+
+databases:
+  - name: governance-db
+    databaseName: governance
+    user: governance
+
+redis:
+  - name: governance-redis

@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+asyncpg
+redis
+sentence-transformers
+httpx
+python-dotenv
+websockets
+pydantic
